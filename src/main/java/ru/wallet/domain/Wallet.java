@@ -2,6 +2,7 @@ package ru.wallet.domain;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,13 +13,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "wallets")
 public class Wallet {
 
     @Id
@@ -29,7 +28,7 @@ public class Wallet {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "users",
+    @JoinTable(name = "wallet2user",
         joinColumns = {@JoinColumn(name = "wallet_id")},
         inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private List<User> users;
@@ -37,10 +36,11 @@ public class Wallet {
     @NotBlank
     private Integer balance;
 
+    @Column(name = "\"limit\"")
     private Integer limit;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id", referencedColumnName="id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "wallet")

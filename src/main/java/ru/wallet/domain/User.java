@@ -10,13 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "users")
 public class User {
 
     @Id
@@ -27,9 +26,11 @@ public class User {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "wallets",
+    @JoinTable(name = "wallet2user",
         joinColumns = {@JoinColumn(name = "user_id")},
         inverseJoinColumns = {@JoinColumn(name = "wallet_id")})
     private List<Wallet> wallets;
 
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Wallet> ownWallets;
 }
