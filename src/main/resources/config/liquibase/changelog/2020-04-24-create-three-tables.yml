@@ -1,0 +1,108 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-04-24-user-table
+      author: a.zborovskiy
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(512)
+                  constraints:
+                    - nullable: false
+  - changeSet:
+      id: 2020-04-24-wallet-table
+      author: a.zborovskiy
+      changes:
+        - createTable:
+            tableName: wallet
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: balance
+                  type: integer
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: limit
+                  type: integer
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: name
+                  type: varchar(512)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: wallet_id
+                    - references: user(id)
+  - changeSet:
+      id: 2020-04-24-operation-table
+      author: a.zborovskiy
+      changes:
+        - createTable:
+            tableName: operation
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: amount
+                  type: integer
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: category
+                  type: varchar(512)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: created
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: wallet_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: operation_id
+                    - references: wallet(id)
+  - changeSet:
+      id: 2020-04-24-wallet2user-table
+      author: a.zborovskiy
+      changes:
+        - createTable:
+            tableName: wallet2user
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: wallet2user_wallet_id
+                    - references: user(id)
+              - column:
+                  name: wallet_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: wallet2user_user_id
+                    - references: wallet(id)
