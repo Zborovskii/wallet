@@ -11,11 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "\"user\"")
 public class User {
 
     @Id
@@ -24,6 +26,9 @@ public class User {
 
     @NotBlank
     private String name;
+
+    @NotBlank
+    private String password;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "wallet2user",

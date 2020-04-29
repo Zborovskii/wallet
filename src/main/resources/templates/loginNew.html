@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="span12">
+        <form action="#" method="post" th:action="@{/user-room}" th:object="${user}" class="form-horizontal">
+          <fieldset>
+            <div id="legend">
+              <legend class="">Login</legend>
+            </div>
+            <div class="control-group">
+              <!-- Username -->
+              <label class="control-label" for="username">Username</label>
+              <div class="controls">
+                <input type="text" th:field="*{name}" id="username" name="username" placeholder="" class="input-xlarge">
+              </div>
+            </div>
+            <div class="control-group">
+              <!-- Password-->
+              <label class="control-label" for="password">Password</label>
+              <div class="controls">
+                <input type="password" th:text="*{password}" id="password" name="password" placeholder=""
+                       class="input-xlarge">
+              </div>
+            </div>
+            <div class="control-group">
+              <!-- Button -->
+              <div class="controls">
+                <button class="btn btn-success">Login</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+
+
+  </div>
+</div>
+
+
+</html>
+

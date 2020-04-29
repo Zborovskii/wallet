@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Hello World!</title>
+</head>
+<body>
+<!--<form method="post" th:action="@{/logout}">-->
+<!--  <input type="submit" value="Sign Out"/>-->
+<!--</form>-->
+<h2>Wallets</h2>
+<div class="groups" th:each="wallet: ${wallets}">
+  <ul class="users" th:each="wallet: ${wallets}">
+    <li th:text="'wallet: ' + ${wallets}"></li>
+  </ul>
+</div>
+</body>
+</html>`
