@@ -13,36 +13,43 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = {"id", "name"})
+@ToString(of = {"id", "name"})
 public class Wallet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotNull
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "wallet2user",
         joinColumns = {@JoinColumn(name = "wallet_id")},
         inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private List<User> users;
 
-    @NotBlank
+    @NotNull
     private Integer balance;
 
+    @Min(value = 0, message = "The value of \"limit\" must be positive")
     @Column(name = "\"limit\"")
     private Integer limit;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "wallet")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "wallet")
     private List<Operation> operations;
+
 }

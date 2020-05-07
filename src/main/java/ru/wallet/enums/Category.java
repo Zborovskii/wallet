@@ -5,5 +5,6 @@ public enum Category {
     MEAL,
     CLOTHES,
     CAR,
-    OTHERS
+    OTHERS,
+    REFILL
 }

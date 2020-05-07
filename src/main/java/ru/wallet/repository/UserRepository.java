@@ -5,6 +5,5 @@ import ru.wallet.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByNameAndPassword(String name, String password);
-
+    User findByName(String name);
 }
