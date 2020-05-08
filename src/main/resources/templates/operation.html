@@ -34,12 +34,13 @@
             </div>
             <div class="form-group">
               <label for="category">Choose category</label>
+
+              <tr th:each="category : ${categories}">
+                <td th:text="${operation.amount}"></td>
+              </tr>
+
               <select class="form-control" th:field="*{category}" id="category">
-                <option th:value="OTHERS">OTHERS</option>
-                <option th:value="MEAL">MEAL</option>
-                <option th:value="CLOTHES">CLOTHES</option>
-                <option th:value="CAR">CAR</option>
-                <option th:value="REFILL">REFILL</option>
+                <option th:each="categorie : ${categories}" th:value="${categorie}" th:text="${categorie}"></option>
               </select>
             </div>
 

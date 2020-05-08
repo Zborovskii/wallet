@@ -13,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +40,6 @@ public class Wallet {
     @NotNull
     private Integer balance;
 
-    @Min(value = 0, message = "The value of \"limit\" must be positive")
     @Column(name = "\"limit\"")
     private Integer limit;
 

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.wallet.domain.User;
+import ru.wallet.dto.UserDto;
+import ru.wallet.mapper.UserMapper;
 import ru.wallet.repository.UserRepository;
 
 @Service
@@ -21,6 +23,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findByName(s);
@@ -28,24 +33,21 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-
         return user;
     }
 
     public User getCurrentUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         return userRepository.getOne(user.getId());
     }
 
-    public Model getUserRoom(Model model, String error) {
+    public String getUserRoom(Model model, String error) {
         User user = getCurrentUser();
-
         model.addAttribute("wallets", user.getWallets());
         model.addAttribute("userId", user.getId());
         model.addAttribute("error", error);
 
-        return model;
+        return "userRoom";
     }
 
     public Model getUserRegistrationForm(Model model, String error) {
@@ -55,7 +57,7 @@ public class UserService implements UserDetailsService {
         return model;
     }
 
-    public String createUser(User user, RedirectAttributes redirectAttributes) {
+    public String createUser(UserDto user, RedirectAttributes redirectAttributes) {
 
         try {
             isValidUser(user);
@@ -65,12 +67,12 @@ public class UserService implements UserDetailsService {
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userRepository.save(userMapper.toUser(user));
 
         return "redirect:/login";
     }
 
-    private void isValidUser(User user) {
+    private void isValidUser(UserDto user) {
         User foundUser = userRepository.findByName(user.getName());
 
         if (foundUser != null) {

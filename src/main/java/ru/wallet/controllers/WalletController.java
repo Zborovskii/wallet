@@ -45,9 +45,10 @@ public class WalletController {
     }
 
     @PostMapping(path = "wallet/{wallet}/edit")
-    public String editWallet(@ModelAttribute Wallet wallet) {
+    public String editWallet(@ModelAttribute Wallet wallet, @PathVariable("wallet") Long walletId,
+                             RedirectAttributes redirectAttributes) {
 
-        return walletService.editWallet(wallet);
+        return walletService.editWallet(wallet, walletId, redirectAttributes);
     }
 
 }

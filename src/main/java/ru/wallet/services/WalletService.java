@@ -21,17 +21,15 @@ public class WalletService {
     private UserService userService;
 
     public String deleteWallet(RedirectAttributes redirectAttributes, Long walletId) {
-        Long currentUserId = userService.getCurrentUser().getId();
 
-        Wallet wallet = walletRepository.getOne(walletId);
-
-        if (!currentUserId.equals(wallet.getOwner().getId())) {
-            redirectAttributes.addAttribute("error", "Only owner can delete wallet");
+        try {
+            isValidWallet(walletId);
+        } catch (Exception ex) {
+            redirectAttributes.addAttribute("error", ex.getMessage());
             return "redirect:/user-room";
         }
 
         walletRepository.deleteById(walletId);
-
         return "redirect:/user-room";
     }
 
@@ -58,13 +56,12 @@ public class WalletService {
 
     public String findWallet(RedirectAttributes redirectAttributes, Long walletId, Model model, String error) {
 
-        User user = userService.getCurrentUser();
         model.addAttribute("error", error);
 
         Optional<Wallet> wallet = walletRepository.findById(walletId);
 
         try {
-            isValidWallet(wallet, user, walletId);
+            isValidWallet(walletId);
         } catch (Exception ex) {
             redirectAttributes.addAttribute("error", ex.getMessage());
             return "redirect:/user-room";
@@ -75,7 +72,14 @@ public class WalletService {
         return "walletEdit";
     }
 
-    public String editWallet(Wallet wallet) {
+    public String editWallet(Wallet wallet, Long walletId, RedirectAttributes redirectAttributes) {
+
+        try {
+            isValidWallet(walletId);
+        } catch (Exception ex) {
+            redirectAttributes.addAttribute("error", ex.getMessage());
+            return "redirect:/user-room";
+        }
 
         User user = userService.getCurrentUser();
         wallet = setUsers(wallet, user);
@@ -88,12 +92,14 @@ public class WalletService {
         return "redirect:/user-room";
     }
 
-    private void isValidWallet(Optional<Wallet> wallet, User user, Long walletId) {
+    private void isValidWallet(Long walletId) {
+        User user = userService.getCurrentUser();
+        Optional<Wallet> wallet = walletRepository.findById(walletId);
 
         if (wallet.isEmpty()) {
             throw new RuntimeException(String.format("There is no wallet %s", walletId));
         } else if (user.getId() != wallet.get().getOwner().getId()) {
-            throw new RuntimeException("Only owner can edit wallet");
+            throw new RuntimeException("Only owner can edit/delete wallet");
         }
     }
 
