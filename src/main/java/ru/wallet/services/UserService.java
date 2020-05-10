@@ -18,7 +18,7 @@ import ru.wallet.repository.UserRepository;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
     public String getUserRoom(Model model, String error) {
         User user = getCurrentUser();
         model.addAttribute("wallets", user.getWallets());
-        model.addAttribute("userId", user.getId());
+        model.addAttribute("user", user);
         model.addAttribute("error", error);
 
         return "userRoom";

@@ -15,7 +15,7 @@ import ru.wallet.services.UserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

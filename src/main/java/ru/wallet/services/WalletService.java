@@ -47,6 +47,7 @@ public class WalletService {
             wallet.setLimit(wallet.getBalance());
         }
 
+        //TODO сетиться поля должны в мапере
         wallet = setUsers(wallet, user);
         wallet.setOwner(user);
         walletRepository.save(wallet);
@@ -84,6 +85,7 @@ public class WalletService {
         User user = userService.getCurrentUser();
         wallet = setUsers(wallet, user);
 
+        //TODO сетиться поля должны в мапере
         if (wallet.getLimit() == null) {
             wallet.setLimit(wallet.getBalance());
         }

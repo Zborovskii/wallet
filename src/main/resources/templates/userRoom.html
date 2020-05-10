@@ -23,6 +23,10 @@
         <input class="btn btn-warning btn-block" type="submit" value="Logout"/>
       </form>
     </div>
+    <div class="col col-6 mt-1 float-left">
+      <input class="btn btn-info btn-block" type="submit"
+             th:value="'Hi User -  ' + ${user.name} + '(id: ' + ${user.id} + ')'"/>
+    </div>
   </div>
   <div th:each="wallet : ${wallets}" class="card mx-auto shadow p-3 mb-3 bg-white rounded mt-3">
     <div class="row">
@@ -30,7 +34,7 @@
         <p th:text="'Name: ' + ${wallet.name}"></p>
         <p th:text="'Limit: ' + ${wallet.limit}"></p>
         <p th:text="'Balance: ' + ${wallet.balance}"></p>
-        <p th:text="'Owner: ' + ${wallet.owner.name}"></p>
+        <p th:text="'Owner: ' + ${wallet.owner.name} + '(id: ' + ${wallet.owner.id} + ')'"></p>
       </div>
       <div class="col-4">
         <div class="row">
@@ -58,7 +62,7 @@
           <div class="ml-3">
             <p>Users:</p>
             <ul>
-              <li th:each="user:${wallet.users}" th:text="${user.name}"></li>
+              <li th:each="user:${wallet.users}" th:text="${user.name} + '(id: ' + ${user.id} + ')'"></li>
             </ul>
           </div>
         </div>

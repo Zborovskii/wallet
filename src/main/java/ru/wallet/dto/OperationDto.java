@@ -1,6 +1,7 @@
 package ru.wallet.dto;
 
 import java.time.LocalDateTime;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import ru.wallet.domain.Wallet;
@@ -11,10 +12,9 @@ public class OperationDto {
 
     private Wallet wallet;
 
-    @NotNull
+    @Min(value = 0, message = "The value of \"amount\" must be positive")
     private Integer amount;
 
-    @NotNull
     private LocalDateTime created;
 
     @NotNull

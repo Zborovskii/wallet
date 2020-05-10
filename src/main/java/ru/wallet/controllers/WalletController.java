@@ -1,8 +1,13 @@
 package ru.wallet.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +36,15 @@ public class WalletController {
         return walletService.getNewWallet(model, error);
     }
 
+    //TODO постить мы должны не сущность а DTO
     @PostMapping(path = "/wallet")
-    public String createWallet(@ModelAttribute Wallet wallet) {
+    public String createWallet(@Valid @ModelAttribute("wallet") Wallet wallet, BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addAttribute("error", getErrors(bindingResult));
+            return "redirect:/wallet";
+        }
 
         return walletService.createWallet(wallet);
     }
@@ -44,11 +56,25 @@ public class WalletController {
         return walletService.findWallet(redirectAttributes, walletId, model, error);
     }
 
+    //TODO постить мы должны не сущность а DTO
     @PostMapping(path = "wallet/{wallet}/edit")
-    public String editWallet(@ModelAttribute Wallet wallet, @PathVariable("wallet") Long walletId,
+    public String editWallet(@Valid @ModelAttribute("wallet") Wallet wallet, BindingResult bindingResult,
+                             @PathVariable("wallet") Long walletId,
                              RedirectAttributes redirectAttributes) {
 
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addAttribute("error", getErrors(bindingResult));
+            redirectAttributes.addAttribute("walletId", walletId);
+            return "redirect:/wallet/{walletId}";
+        }
+
         return walletService.editWallet(wallet, walletId, redirectAttributes);
+    }
+
+    private List<String> getErrors(BindingResult bindingResult) {
+        return bindingResult.getAllErrors().stream()
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .collect(Collectors.toList());
     }
 
 }
