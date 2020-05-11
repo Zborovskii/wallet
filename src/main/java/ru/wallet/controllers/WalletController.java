@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.wallet.domain.Wallet;
+import ru.wallet.dto.WalletDto;
 import ru.wallet.services.WalletService;
 
 @Controller
@@ -36,9 +36,8 @@ public class WalletController {
         return walletService.getNewWallet(model, error);
     }
 
-    //TODO постить мы должны не сущность а DTO
     @PostMapping(path = "/wallet")
-    public String createWallet(@Valid @ModelAttribute("wallet") Wallet wallet, BindingResult bindingResult,
+    public String createWallet(@Valid @ModelAttribute("wallet") WalletDto walletDto, BindingResult bindingResult,
                                RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
@@ -46,7 +45,7 @@ public class WalletController {
             return "redirect:/wallet";
         }
 
-        return walletService.createWallet(wallet);
+        return walletService.createWallet(walletDto);
     }
 
     @GetMapping(path = "wallet/{wallet}")
@@ -56,9 +55,8 @@ public class WalletController {
         return walletService.findWallet(redirectAttributes, walletId, model, error);
     }
 
-    //TODO постить мы должны не сущность а DTO
     @PostMapping(path = "wallet/{wallet}/edit")
-    public String editWallet(@Valid @ModelAttribute("wallet") Wallet wallet, BindingResult bindingResult,
+    public String editWallet(@Valid @ModelAttribute("wallet") WalletDto walletDto, BindingResult bindingResult,
                              @PathVariable("wallet") Long walletId,
                              RedirectAttributes redirectAttributes) {
 
@@ -68,7 +66,7 @@ public class WalletController {
             return "redirect:/wallet/{walletId}";
         }
 
-        return walletService.editWallet(wallet, walletId, redirectAttributes);
+        return walletService.editWallet(walletDto, walletId, redirectAttributes);
     }
 
     private List<String> getErrors(BindingResult bindingResult) {

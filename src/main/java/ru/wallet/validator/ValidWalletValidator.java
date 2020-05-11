@@ -31,7 +31,6 @@ public class ValidWalletValidator implements ConstraintValidator<ValidWallet, Lo
         } else if (user.getId() != wallet.get().getOwner().getId()) {
             return false;
         }
-
         return true;
     }
 }

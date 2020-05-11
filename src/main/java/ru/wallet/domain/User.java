@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @EqualsAndHashCode(of = {"id", "name"})
 @ToString(of = {"id", "name"})
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "customer")
 public class User implements UserDetails {
 
     @Id

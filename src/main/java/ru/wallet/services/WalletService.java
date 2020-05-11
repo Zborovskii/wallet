@@ -1,14 +1,14 @@
 package ru.wallet.services;
 
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.wallet.domain.User;
 import ru.wallet.domain.Wallet;
+import ru.wallet.dto.WalletDto;
+import ru.wallet.mapper.WalletMapper;
 import ru.wallet.repository.WalletRepository;
 
 @Service
@@ -19,6 +19,9 @@ public class WalletService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WalletMapper walletMapper;
 
     public String deleteWallet(RedirectAttributes redirectAttributes, Long walletId) {
 
@@ -40,16 +43,11 @@ public class WalletService {
         return "wallet";
     }
 
-    public String createWallet(Wallet wallet) {
+    public String createWallet(WalletDto walletDto) {
 
         User user = userService.getCurrentUser();
-        if (wallet.getLimit() == null) {
-            wallet.setLimit(wallet.getBalance());
-        }
 
-        //TODO сетиться поля должны в мапере
-        wallet = setUsers(wallet, user);
-        wallet.setOwner(user);
+        Wallet wallet = walletMapper.toWalletWithOwner(walletDto, user);
         walletRepository.save(wallet);
 
         return "redirect:/user-room";
@@ -73,7 +71,7 @@ public class WalletService {
         return "walletEdit";
     }
 
-    public String editWallet(Wallet wallet, Long walletId, RedirectAttributes redirectAttributes) {
+    public String editWallet(WalletDto walletDto, Long walletId, RedirectAttributes redirectAttributes) {
 
         try {
             isValidWallet(walletId);
@@ -83,12 +81,7 @@ public class WalletService {
         }
 
         User user = userService.getCurrentUser();
-        wallet = setUsers(wallet, user);
-
-        //TODO сетиться поля должны в мапере
-        if (wallet.getLimit() == null) {
-            wallet.setLimit(wallet.getBalance());
-        }
+        Wallet wallet = walletMapper.toWalletWithOwnerAndId(walletDto, user, walletId);
         walletRepository.save(wallet);
 
         return "redirect:/user-room";
@@ -104,17 +97,4 @@ public class WalletService {
             throw new RuntimeException("Only owner can edit/delete wallet");
         }
     }
-
-    private Wallet setUsers(Wallet wallet, User user) {
-        Stream<Long> allWalletUserIds = wallet.getUsers().stream()
-            .filter(Objects::nonNull)
-            .map(User::getId);
-
-        if (allWalletUserIds.noneMatch(u -> u.equals(user.getId()))) {
-            wallet.getUsers().add(user);
-        }
-
-        return wallet;
-    }
-
 }
