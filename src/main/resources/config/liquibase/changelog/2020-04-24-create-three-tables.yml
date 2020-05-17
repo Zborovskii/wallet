@@ -9,6 +9,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     - primaryKey: true
               - column:
@@ -31,6 +32,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     - primaryKey: true
               - column:
@@ -64,6 +66,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     - primaryKey: true
               - column:
@@ -110,31 +113,3 @@ databaseChangeLog:
                     - nullable: false
                     - foreignKeyName: wallet2user_user_id
                     - references: wallet(id)
-  - changeSet:
-      id: 2020-05-11-add-auto-increment
-      author: a.zborovskiy
-      changes:
-        - addAutoIncrement:
-            columnDataType: bigint
-            columnName: id
-            defaultOnNull: false
-            generationType: ALWAYS
-            incrementBy: 1
-            startWith: 100
-            tableName: customer
-        - addAutoIncrement:
-            columnDataType: bigint
-            columnName: id
-            defaultOnNull: false
-            generationType: ALWAYS
-            incrementBy: 1
-            startWith: 100
-            tableName: wallet
-        - addAutoIncrement:
-            columnDataType: bigint
-            columnName: id
-            defaultOnNull: false
-            generationType: ALWAYS
-            incrementBy: 1
-            startWith: 100
-            tableName: operation

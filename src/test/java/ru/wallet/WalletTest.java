@@ -7,14 +7,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.wallet.config.TestConfig;
 import ru.wallet.domain.Operation;
 import ru.wallet.domain.User;
 import ru.wallet.domain.Wallet;
@@ -24,11 +20,6 @@ import ru.wallet.repository.UserRepository;
 import ru.wallet.repository.WalletRepository;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {
-    TestConfig.class,
-    LiquibaseProperties.class
-})
-@ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class WalletTest {

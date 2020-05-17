@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
         }
         return user;
     }
-
+    //не должно быть
     public User getCurrentUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.getOne(user.getId());
