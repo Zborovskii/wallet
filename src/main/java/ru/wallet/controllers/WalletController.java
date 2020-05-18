@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,10 +25,11 @@ public class WalletController {
     @Autowired
     private WalletService walletService;
 
+    @PreAuthorize("@mySecurityService.hasWalletPermission(authentication, #walletId)")
     @RequestMapping(path = "wallet/{wallet}/delete")
-    public String deleteWallet(RedirectAttributes redirectAttributes, @PathVariable("wallet") Long walletId) {
+    public String deleteWallet(@PathVariable("wallet") Long walletId) {
 
-        return walletService.deleteWallet(redirectAttributes, walletId);
+        return walletService.deleteWallet(walletId);
     }
 
     @GetMapping(path = "/wallet")
@@ -48,13 +50,15 @@ public class WalletController {
         return walletService.createWallet(walletDto);
     }
 
+    @PreAuthorize("@mySecurityService.hasWalletPermission(authentication, #walletId)")
     @GetMapping(path = "wallet/{wallet}")
-    public String findWallet(RedirectAttributes redirectAttributes, @PathVariable("wallet") Long walletId, Model model,
+    public String findWallet(@PathVariable("wallet") Long walletId, Model model,
                              @RequestParam(required = false) String error) {
 
-        return walletService.findWallet(redirectAttributes, walletId, model, error);
+        return walletService.findWallet(walletId, model, error);
     }
 
+    @PreAuthorize("@mySecurityService.hasWalletPermission(authentication, #walletId)")
     @PostMapping(path = "wallet/{wallet}/edit")
     public String editWallet(@Valid @ModelAttribute("wallet") WalletDto walletDto, BindingResult bindingResult,
                              @PathVariable("wallet") Long walletId,
@@ -66,7 +70,7 @@ public class WalletController {
             return "redirect:/wallet/{walletId}";
         }
 
-        return walletService.editWallet(walletDto, walletId, redirectAttributes);
+        return walletService.editWallet(walletDto, walletId);
     }
 
     private List<String> getErrors(BindingResult bindingResult) {
