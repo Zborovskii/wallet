@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,7 @@ public class OperationController {
     @Autowired
     private OperationService operationService;
 
+    @PreAuthorize("@mySecurityService.hasWalletUserPermission(authentication, #walletId)")
     @GetMapping(value = "/wallet/{wallet}/operations")
     public String getOperationsByWallet(Model model, @PathVariable("wallet") Long walletId,
                                         RedirectAttributes redirectAttributes) {
@@ -30,6 +32,7 @@ public class OperationController {
         return operationService.getOperationsByWallet(model, walletId, redirectAttributes);
     }
 
+    @PreAuthorize("@mySecurityService.hasWalletUserPermission(authentication, #walletId)")
     @GetMapping(value = "/wallet/{wallet}/operation")
     public String getNewOperation(Model model, @PathVariable("wallet") Long walletId,
                                   @RequestParam(name = "error", required = false) String error,
@@ -38,6 +41,7 @@ public class OperationController {
         return operationService.getNewOperation(model, walletId, error, redirectAttributes);
     }
 
+    @PreAuthorize("@mySecurityService.hasWalletUserPermission(authentication, #walletId)")
     @PostMapping(value = "/wallet/{wallet}/operation")
     public String saveOperation(@Valid @ModelAttribute OperationDto operation, BindingResult bindingResult,
                                 @PathVariable("wallet") Long walletId,

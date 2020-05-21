@@ -1,24 +1,42 @@
 package ru.wallet.services;
 
+import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import ru.wallet.domain.User;
 import ru.wallet.domain.Wallet;
+import ru.wallet.repository.WalletRepository;
 
-@Component("mySecurityService")
+@Component
 public class MySecurityService {
 
-    public boolean hasWalletPermission(Authentication authentication, Long walletId) {
+    private WalletRepository walletRepository;
+
+    public MySecurityService(WalletRepository walletRepository) {
+        this.walletRepository = walletRepository;
+    }
+
+    public boolean hasWalletOwnerPermission(Object principal, Long walletId) {
+        User user = (User) principal;
+        Optional<Wallet> wallet = walletRepository.findById(walletId);
+        boolean result = false;
+
+        if (wallet.isPresent()) {
+            result = wallet.get().getOwner().getId().equals(user.getId());
+        }
+
+        return result;
+    }
+
+    public boolean hasWalletUserPermission(Authentication authentication, Long walletId) {
         User user = (User) authentication.getPrincipal();
+        Optional<Wallet> wallet = walletRepository.findById(walletId);
+        boolean result = false;
 
-        boolean userHasThisWallet = user.getWallets().stream()
-            .map(Wallet::getId)
-            .anyMatch(item -> item.equals(walletId));
+        if (wallet.isPresent()) {
+            result = wallet.get().getUsers().stream().anyMatch(item -> item.getId().equals(user.getId()));
+        }
 
-        boolean userHasOwnWallet = user.getOwnWallets().stream()
-            .map(Wallet::getId)
-            .anyMatch(item -> item.equals(walletId));
-
-        return userHasOwnWallet && userHasThisWallet;
+        return result;
     }
 }

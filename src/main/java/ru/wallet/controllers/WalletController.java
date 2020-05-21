@@ -25,7 +25,7 @@ public class WalletController {
     @Autowired
     private WalletService walletService;
 
-    @PreAuthorize("@mySecurityService.hasWalletPermission(authentication, #walletId)")
+    @PreAuthorize("@mySecurityService.hasWalletOwnerPermission(principal, #walletId)")
     @RequestMapping(path = "wallet/{wallet}/delete")
     public String deleteWallet(@PathVariable("wallet") Long walletId) {
 
@@ -50,7 +50,7 @@ public class WalletController {
         return walletService.createWallet(walletDto);
     }
 
-    @PreAuthorize("@mySecurityService.hasWalletPermission(authentication, #walletId)")
+    @PreAuthorize("@mySecurityService.hasWalletOwnerPermission(principal, #walletId)")
     @GetMapping(path = "wallet/{wallet}")
     public String findWallet(@PathVariable("wallet") Long walletId, Model model,
                              @RequestParam(required = false) String error) {
@@ -58,7 +58,7 @@ public class WalletController {
         return walletService.findWallet(walletId, model, error);
     }
 
-    @PreAuthorize("@mySecurityService.hasWalletPermission(authentication, #walletId)")
+    @PreAuthorize("@mySecurityService.hasWalletOwnerPermission(principal, #walletId)")
     @PostMapping(path = "wallet/{wallet}/edit")
     public String editWallet(@Valid @ModelAttribute("wallet") WalletDto walletDto, BindingResult bindingResult,
                              @PathVariable("wallet") Long walletId,

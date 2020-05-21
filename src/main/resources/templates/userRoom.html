@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -47,13 +47,17 @@
                href="#" role="button">Add operation</a>
           </div>
           <div class="col-6 mt-1">
-            <a th:href="@{/wallet/{wallet} (wallet=${wallet.id})}" class="btn btn-primary btn-block"
-               href="#" role="button">Edit wallet</a>
+            <div th:if="${security.hasWalletOwnerPermission(user, wallet.id)}">
+              <a th:href="@{/wallet/{wallet} (wallet=${wallet.id})}" class="btn btn-primary btn-block"
+                 href="#" role="button">Edit wallet</a>
+            </div>
           </div>
           <div class="col-6 mt-1">
-            <form th:action="@{/wallet/{wallet}/delete (wallet=${wallet.id})}" method="POST">
-              <input class="btn btn-danger btn-block" type="submit" value="Delete"/>
-            </form>
+            <div th:if="${security.hasWalletOwnerPermission(user, wallet.id)}">
+              <form th:action="@{/wallet/{wallet}/delete (wallet=${wallet.id})}" method="POST">
+                <input class="btn btn-danger btn-block" type="submit" value="Delete"/>
+              </form>
+            </div>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import ru.wallet.domain.User;
 import ru.wallet.dto.UserDto;
 import ru.wallet.mapper.UserMapper;
 import ru.wallet.repository.UserRepository;
+import ru.wallet.repository.WalletRepository;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -25,6 +26,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private WalletRepository walletRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -46,6 +50,7 @@ public class UserService implements UserDetailsService {
         model.addAttribute("wallets", user.getWallets());
         model.addAttribute("user", user);
         model.addAttribute("error", error);
+        model.addAttribute("security", new MySecurityService(walletRepository));
 
         return "userRoom";
     }
