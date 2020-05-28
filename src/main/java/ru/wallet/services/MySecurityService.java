@@ -19,24 +19,18 @@ public class MySecurityService {
     public boolean hasWalletOwnerPermission(Object principal, Long walletId) {
         User user = (User) principal;
         Optional<Wallet> wallet = walletRepository.findById(walletId);
-        boolean result = false;
 
-        if (wallet.isPresent()) {
-            result = wallet.get().getOwner().getId().equals(user.getId());
-        }
-
-        return result;
+        return wallet
+            .map(w -> w.getOwner().getId().equals(user.getId()))
+            .orElse(false);
     }
 
     public boolean hasWalletUserPermission(Authentication authentication, Long walletId) {
         User user = (User) authentication.getPrincipal();
         Optional<Wallet> wallet = walletRepository.findById(walletId);
-        boolean result = false;
 
-        if (wallet.isPresent()) {
-            result = wallet.get().getUsers().stream().anyMatch(item -> item.getId().equals(user.getId()));
-        }
-
-        return result;
+        return wallet
+            .map(w -> w.getUsers().stream().anyMatch(item -> item.getId().equals(user.getId())))
+            .orElse(false);
     }
 }
