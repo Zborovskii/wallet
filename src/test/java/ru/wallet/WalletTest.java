@@ -97,5 +97,6 @@ public class WalletTest {
         wallet.setOwner(user);
         return walletRepository.save(wallet);
     }
+
 }
 
