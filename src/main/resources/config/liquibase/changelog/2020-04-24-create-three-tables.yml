@@ -4,15 +4,21 @@ databaseChangeLog:
       author: a.zborovskiy
       changes:
         - createTable:
-            tableName: user
+            tableName: customer
             columns:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     - primaryKey: true
               - column:
                   name: name
+                  type: varchar(512)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: password
                   type: varchar(512)
                   constraints:
                     - nullable: false
@@ -26,6 +32,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     - primaryKey: true
               - column:
@@ -47,9 +54,8 @@ databaseChangeLog:
                   name: owner_id
                   type: bigint
                   constraints:
-                    - nullable: false
                     - foreignKeyName: wallet_id
-                    - references: user(id)
+                    - references: customer(id)
   - changeSet:
       id: 2020-04-24-operation-table
       author: a.zborovskiy
@@ -60,6 +66,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     - primaryKey: true
               - column:
@@ -98,7 +105,7 @@ databaseChangeLog:
                   constraints:
                     - nullable: false
                     - foreignKeyName: wallet2user_wallet_id
-                    - references: user(id)
+                    - references: customer(id)
               - column:
                   name: wallet_id
                   type: bigint

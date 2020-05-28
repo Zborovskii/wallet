@@ -11,12 +11,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.wallet.enums.Category;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = {"id", "amount"})
+@ToString(of = {"id", "amount"})
 public class Operation {
 
     @Id
@@ -27,13 +31,13 @@ public class Operation {
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
-    @NotBlank
+    @NotNull
     private Integer amount;
 
-    @NotBlank
+    @NotNull
     private LocalDateTime created;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Category category;
 

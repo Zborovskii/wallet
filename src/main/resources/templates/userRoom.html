@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>All Employees</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+<body>
+<div class="container">
+  <div class="alert alert-danger" role="alert" th:if="${error}">
+    <div th:text="*{error}"></div>
+  </div>
+  <div class="row">
+    <div class="col col-3 mt-1">
+      <a th:href="@{/wallet}" class="btn btn-success btn-block"
+         href="#" role="button">Create wallet</a>
+    </div>
+    <div class="col col-3 mt-1 float-left">
+      <form th:action="@{/logout}" method="POST">
+        <input class="btn btn-warning btn-block" type="submit" value="Logout"/>
+      </form>
+    </div>
+    <div class="col col-6 mt-1 float-left">
+      <input class="btn btn-info btn-block" type="submit"
+             th:value="'Hi User -  ' + ${user.name} + '(id: ' + ${user.id} + ')'"/>
+    </div>
+  </div>
+  <div th:each="wallet : ${wallets}" class="card mx-auto shadow p-3 mb-3 bg-white rounded mt-3">
+    <div class="row">
+      <div class="col-8">
+        <p th:text="'Name: ' + ${wallet.name}"></p>
+        <p th:text="'Limit: ' + ${wallet.limit}"></p>
+        <p th:text="'Balance: ' + ${wallet.balance}"></p>
+        <p th:text="'Owner: ' + ${wallet.owner.name} + '(id: ' + ${wallet.owner.id} + ')'"></p>
+      </div>
+      <div class="col-4">
+        <div class="row">
+          <div class="col-6 mt-1">
+            <a th:href="@{/wallet/{wallet}/operations (wallet=${wallet.id})}"
+               class="btn btn-primary btn-block" href="#" role="button">Operations</a>
+          </div>
+          <div class="col-6 mt-1">
+            <a th:href="@{/wallet/{wallet}/operation (wallet=${wallet.id})}" class="btn btn-primary btn-block"
+               href="#" role="button">Add operation</a>
+          </div>
+          <div class="col-6 mt-1">
+            <div th:if="${security.hasWalletOwnerPermission(user, wallet.id)}">
+              <a th:href="@{/wallet/{wallet} (wallet=${wallet.id})}" class="btn btn-primary btn-block"
+                 href="#" role="button">Edit wallet</a>
+            </div>
+          </div>
+          <div class="col-6 mt-1">
+            <div th:if="${security.hasWalletOwnerPermission(user, wallet.id)}">
+              <form th:action="@{/wallet/{wallet}/delete (wallet=${wallet.id})}" method="POST">
+                <input class="btn btn-danger btn-block" type="submit" value="Delete"/>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="ml-3">
+            <p>Users:</p>
+            <ul>
+              <li th:each="user:${wallet.users}" th:text="${user.name} + '(id: ' + ${user.id} + ')'"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
