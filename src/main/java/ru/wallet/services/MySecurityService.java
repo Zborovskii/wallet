@@ -30,7 +30,10 @@ public class MySecurityService {
         Optional<Wallet> wallet = walletRepository.findById(walletId);
 
         return wallet
-            .map(w -> w.getUsers().stream().anyMatch(item -> item.getId().equals(user.getId())))
+            .map(w -> w.getUsers()
+                .stream()
+                .anyMatch(item -> item.getId().equals(user.getId()))
+            )
             .orElse(false);
     }
 }
