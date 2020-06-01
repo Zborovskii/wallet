@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.wallet.domain.Operation;
 import ru.wallet.domain.User;
@@ -22,6 +23,7 @@ import ru.wallet.repository.WalletRepository;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles(value = "test")
 public class WalletTest {
 
     @Autowired
@@ -97,5 +99,6 @@ public class WalletTest {
         wallet.setOwner(user);
         return walletRepository.save(wallet);
     }
+
 }
 
