@@ -117,6 +117,7 @@
       <artifactId>spring-boot-test-autoconfigure</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
   <properties>
