@@ -27,11 +27,9 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
     - name: Build and test project with Maven
-      run: mvn -B package --file pom.xml
-    - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1.6
-      if: always()
+      run: mvn test --batch-mode -Dmaven.test.failure.ignore=true
+    - name: Publish Test Report
+      uses: scacap/action-surefire-report@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        files: test-results/**/*.xml
     
