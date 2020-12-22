@@ -20,5 +20,18 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
-    - name: Build with Maven
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    - name: Build and test project with Maven
       run: mvn -B package --file pom.xml
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1.6
+      if: always()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        files: test-results/**/*.xml
+    
